@@ -1,0 +1,644 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	line-height:107%;
+	font-size:10.0pt;
+	font-family:"Verdana",sans-serif;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Verdana",sans-serif;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:"Courier New";}
+span.gewyw5ybjeb
+	{mso-style-name:gewyw5ybjeb;}
+span.gewyw5ybmdb
+	{mso-style-name:gewyw5ybmdb;}
+span.gewyw5ybaeb
+	{mso-style-name:gewyw5ybaeb;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:"Verdana",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-IN>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><b><span style='font-size:12.0pt;line-height:107%'>Project
+Report for Practical Machine Learning:</span></b></p>
+
+<p class=MsoNormal>By: Girija</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The goal of this project is to investigate how well an
+activity was performed by six wearers of electronic devices.</p>
+
+<p class=MsoNormal>Majority of the attention in human activity recognition
+research focuses on discrimination between different type of activities, but
+not quality of the activities. These six participants were between 20 to 28
+years with little weight lifting experience. They were asked to perform one set
+of 10 repetitions of the Unilateral Dumbbell Biceps Curl in five different
+fashions, namely</p>
+
+<p class=MsoNormal>Class A: exactly according to the specification</p>
+
+<p class=MsoNormal>Class B: throwing the elbows to the front</p>
+
+<p class=MsoNormal>Class C: lifting the dumbbell only halfway</p>
+
+<p class=MsoNormal>Class D: lowering the dumbbell only half way</p>
+
+<p class=MsoNormal>Class E: throwing the hips to the front.</p>
+
+<p class=MsoNormal>Notice that only class A corresponds to the specified
+execution of the exercise, and others correspond to common mistakes. To ensure
+the quality of data, an experienced weight lifter was there to supervise the
+participants. More information is available from the website here.</p>
+
+<p class=MsoNormal>Project Goal:</p>
+
+<p class=MsoNormal>The goal of this project is to predict the manner in which
+the participants did the exercise. In other words, we need to predict the
+different fashions of the Unilateral Dumbbell Biceps crul performed by the participants.
+It is the classe varaible in the dataset, and we can use any of the other
+variables to predict with.</p>
+
+<p class=MsoNormal><b>Preparing and getting the data and Load packages:</b></p>
+
+<p class=MsoNoSpacing>rm(list = ls(all = TRUE))</p>
+
+<p class=MsoNoSpacing>library(caret)</p>
+
+<p class=MsoNoSpacing>library(rpart)</p>
+
+<p class=MsoNoSpacing>library(rpart.plot)</p>
+
+<p class=MsoNoSpacing>library(RColorBrewer)</p>
+
+<p class=MsoNoSpacing>library(rattle)</p>
+
+<p class=MsoNoSpacing>library(randomForest)</p>
+
+<p class=MsoNoSpacing>library(knitr)</p>
+
+<p class=MsoNoSpacing>setwd(&quot;C:\\Users\\sai\\Desktop\\Full\\coursera\\machine
+learning&quot;)</p>
+
+<p class=MsoNoSpacing>training &lt;- read.csv
+(&quot;C:\\Users\\sai\\Desktop\\Full\\coursera\\machine
+learning\\pml-training.csv&quot;)</p>
+
+<p class=MsoNoSpacing>testing &lt;- read.csv(&quot;C:\\Users\\sai\\Desktop\\Full\\coursera\\machine
+learning\\\\pml-testing.csv&quot;)</p>
+
+<p class=MsoNormal>head(training)</p>
+
+<p class=MsoNormal><span style='font-size:10.5pt;line-height:107%;font-family:
+"Helvetica",sans-serif;color:#333333;background:white'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:10.5pt;line-height:107%;font-family:
+"Helvetica",sans-serif;color:#333333;background:white'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='line-height:107%;color:#333333;background:white'>The
+raw training data has 19622 rows of observations and 158 features (predictors).
+Column X is unusable row number. While the testing data has 20 rows and the
+same 158 features. There is one column of target outcome named classe.</span></p>
+
+<p class=MsoNormal><b><span style='line-height:107%;color:#333333;background:
+white'>Data Partitioning:</span></b></p>
+
+<p class=MsoNormal><span style='line-height:107%;color:#333333;background:white'>Since
+the testing data doesn’t consist of the actual classe varaible, we cannot
+predict the performance of the classification model. Therefore, the training
+data was splitted up- 60% became the training data, and 40% became the testing
+data.</span></p>
+
+<p class=MsoNoSpacing>inTrain &lt;- createDataPartition(training$classe, p=0.6,
+list=FALSE)</p>
+
+<p class=MsoNoSpacing>myTraining &lt;- training[inTrain, ]</p>
+
+<p class=MsoNoSpacing>myTesting &lt;- training[-inTrain, ]</p>
+
+<p class=MsoNoSpacing>dim(myTraining)</p>
+
+<p class=MsoNoSpacing>dim(myTesting)</p>
+
+<p class=MsoNormal><span style='line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><span style='font-size:12.0pt;line-height:107%'>Model
+Building:</span></b></p>
+
+<p class=MsoNoSpacing><b><span style='font-size:12.0pt'>I  Prediction with
+Decision Trees:</span></b></p>
+
+<p class=MsoNoSpacing><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+
+<p class=MsoNoSpacing>set.seed(123)</p>
+
+<p class=MsoNoSpacing>modFitA1 &lt;- rpart(classe ~ ., data=myTraining,
+method=&quot;class&quot;)</p>
+
+<p class=MsoNoSpacing>fancyRpartPlot(modFitA1)</p>
+
+<p class=MsoNoSpacing><b>&nbsp;</b></p>
+
+<p class=MsoNoSpacing><b>output:</b></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=614
+ style='width:460.7pt'>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; set.seed(123)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; modFitA1 &lt;-
+  rpart(classe ~ ., data=myTraining, method=&quot;class&quot;)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt;
+  fancyRpartPlot(modFitA1)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; library(e1071)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; predictionsA1
+  &lt;- predict(modFitA1, myTesting, type = &quot;class&quot;)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; cmtree &lt;-
+  confusionMatrix(predictionsA1, myTesting$classe)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:blue'>&gt; cmtree</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Confusion Matrix and
+  Statistics</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>          Reference</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Prediction    A   
+  B    C    D    E</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>         A 2147  
+  70    6    2    0</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>         B   67 1297 
+  122   66    0</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>         C   18  139
+  1221  188   52</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>         D    0   12  
+  11  811   85</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>         E    0   
+  0    8  219 1305</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Overall Statistics</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>                                         
+  </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>               Accuracy
+  : 0.8643          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>                 95%
+  CI : (0.8565, 0.8718)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>    No Information
+  Rate : 0.2845          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>    P-Value [Acc &gt;
+  NIR] : &lt; 2.2e-16       </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>                                         
+  </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>                 
+  Kappa : 0.8282          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'> Mcnemar's Test
+  P-Value : NA              </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Statistics by Class:</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>                    
+  Class: A Class: B Class: C Class: D Class: E</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Sensitivity           
+  0.9619   0.8544   0.8925   0.6306   0.9050</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Specificity           
+  0.9861   0.9597   0.9387   0.9835   0.9646</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Pos Pred Value        
+  0.9649   0.8357   0.7546   0.8825   0.8518</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Neg Pred Value        
+  0.9849   0.9649   0.9764   0.9314   0.9783</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Prevalence            
+  0.2845   0.1935   0.1744   0.1639   0.1838</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Detection Rate        
+  0.2736   0.1653   0.1556   0.1034   0.1663</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Detection Prevalence  
+  0.2836   0.1978   0.2062   0.1171   0.1953</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='color:black'>Balanced Accuracy     
+  0.9740   0.9071   0.9156   0.8071   0.9348</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><span style='font-size:12.0pt'><img width=588 height=346
+  id="Picture 1" src="Projectreport_files/image001.jpg"></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'>&nbsp;</p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'>&nbsp;</p>
+  <p class=MsoNoSpacing><b><span style='font-size:12.0pt'>II Prediction with
+  Generalized Boosted Regression:</span></b></p>
+  <p class=MsoNoSpacing><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+  <pre style='word-break:break-all'><span class=gewyw5ybjeb><span
+  style='color:blue;background:#E1E2E5'>&gt; </span></span><span
+  class=gewyw5ybmdb><span style='color:blue;background:#E1E2E5'>set.seed(123)</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>fitControl &lt;- trainControl(method = &quot;repeatedcv&quot;,</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>+ </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>number = 5,</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>+ </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>repeats = 1)</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>gbmFit1 &lt;- train(classe ~ ., data=myTraining, method = &quot;gbm&quot;,</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>+ </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>trControl = fitControl,</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>+ </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>verbose = FALSE)</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>gbmFinMod1 &lt;- gbmFit1$finalModel</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>gbmPredTest &lt;- predict(gbmFit1, newdata=myTesting)</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>gbmAccuracyTest &lt;- confusionMatrix(gbmPredTest, myTesting$classe)</span></span></pre><pre
+  style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+  background:#E1E2E5'>&gt; </span></span><span class=gewyw5ybmdb><span
+  style='color:blue;background:#E1E2E5'>gbmAccuracyTest</span></span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Confusion Matrix and Statistics</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>&nbsp;</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>          Reference</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Prediction    A    B    C    D    E</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>         A 2232    0    0    0    0</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>         B    0 1513    2    0    0</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>         C    0    2 1358    5    0</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>         D    0    3    8 1281    6</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>         E    0    0    0    0 1436</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>&nbsp;</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Overall Statistics</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>                                          </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>               Accuracy : 0.9967          </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>                 95% CI : (0.9951, 0.9978)</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>    No Information Rate : 0.2845          </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>                                          </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>                  Kappa : 0.9958          </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'> Mcnemar's Test P-Value : NA              </span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>&nbsp;</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Statistics by Class:</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>&nbsp;</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>                     Class: A Class: B Class: C Class: D Class: E</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Sensitivity            1.0000   0.9967   0.9927   0.9961   0.9958</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Specificity            1.0000   0.9997   0.9989   0.9974   1.0000</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Pos Pred Value         1.0000   0.9987   0.9949   0.9869   1.0000</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Neg Pred Value         1.0000   0.9992   0.9985   0.9992   0.9991</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Prevalence             0.2845   0.1935   0.1744   0.1639   0.1838</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Detection Rate         0.2845   0.1928   0.1731   0.1633   0.1830</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Detection Prevalence   0.2845   0.1931   0.1740   0.1654   0.1830</span></pre><pre
+  style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Balanced Accuracy      1.0000   0.9982   0.9958   0.9968   0.9979</span></pre>
+  <p class=MsoNoSpacing><b>&nbsp;</b></p>
+  <p class=MsoNoSpacing><img width=622 height=350 id="Picture 5"
+  src="Projectreport_files/image002.jpg"></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><b><span style='font-size:12.0pt'>III. Prediction with Random Forests:</span></b></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'>Random forest requires more computation time, so it’s wiser to get a
+  list of variables that’s more likely to predict classe well and see how the model
+  performs first. If we predict the classe with the variables that correlates
+  with classe the most (r&gt; 0.1), we get a classification model with accuracy
+  of 0.879 if we apply it on the testing set. This is fairly good since the
+  prediction only depends on 6 variables. The model considering all of the
+  variables after dimension reduction/data cleaning earlier has a accuracy of
+  0.997, which is even better.</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=841>
+   <tr>
+    <td width=1 valign=top style='width:.75pt;padding:0cm 0cm 0cm 0cm'></td>
+   </tr>
+  </table>
+  </td>
+ </tr>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:blue'>&gt; set.seed(123)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:blue'>&gt; modFitB1 &lt;- randomForest(classe ~ ., data=myTraining)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:blue'>&gt; predictionB1 &lt;- predict(modFitB1, myTesting, type =
+  &quot;class&quot;)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:blue'>&gt; cmrf &lt;- confusionMatrix(predictionB1, myTesting$classe)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:blue'>&gt; cmrf</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Confusion Matrix and Statistics</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>          Reference</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Prediction    A    B    C    D    E</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>         A 2232    3    0    0    0</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>         B    0 1515    0    0    0</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>         C    0    0 1368    3    0</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>         D    0    0    0 1280   12</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>         E    0    0    0    3 1430</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Overall Statistics</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>                                          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>               Accuracy : 0.9973          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>                 95% CI : (0.9959, 0.9983)</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>    No Information Rate : 0.2845          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>                                          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>                  Kappa : 0.9966          </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'> Mcnemar's Test P-Value : NA              </span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Statistics by Class:</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>&nbsp;</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>                     Class: A Class: B Class: C Class: D Class:
+  E</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Sensitivity            1.0000   0.9980   1.0000   0.9953  
+  0.9917</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Specificity            0.9995   1.0000   0.9995   0.9982  
+  0.9995</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Pos Pred Value         0.9987   1.0000   0.9978   0.9907  
+  0.9979</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Neg Pred Value         1.0000   0.9995   1.0000   0.9991  
+  0.9981</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Prevalence             0.2845   0.1935   0.1744   0.1639  
+  0.1838</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Detection Rate         0.2845   0.1931   0.1744   0.1631  
+  0.1823</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Detection Prevalence   0.2849   0.1931   0.1747   0.1647  
+  0.1826</span></p>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal;word-break:break-all'><span style='font-family:"Courier New";
+  color:black'>Balanced Accuracy      0.9997   0.9990   0.9998   0.9968  
+  0.9956</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'></td>
+ </tr>
+ <tr>
+  <td width=614 valign=top style='width:460.7pt;padding:0cm 0cm 6.0pt 4.5pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=841>
+   <tr>
+    <td width=1 valign=top style='width:.75pt;padding:0cm 0cm 0cm 0cm'>
+    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;
+    line-height:normal'>Both the accuracy and the Cohen’s kappa indicator of
+    concordance indicate that the predictor seems to have a low out of sample
+    error rate. </p>
+    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;
+    line-height:normal'>&nbsp;</p>
+    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;
+    line-height:normal'><img width=674 height=348 id="Picture 3"
+    src="Projectreport_files/image003.jpg"></p>
+    <p class=MsoNoSpacing>plot(modFitB1) </p>
+    </td>
+   </tr>
+  </table>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><img width=668 height=342 id="Picture 4"
+  src="Projectreport_files/image004.jpg"></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNoSpacing><b><span style='font-size:12.0pt'>Predicting Results on
+the Test Data:</span></b></p>
+
+<p class=MsoNoSpacing><b><span style='font-size:12.0pt'>&nbsp;</span></b></p>
+
+<p class=MsoNoSpacing>Random Forests gave an Accuracy in the myTesting dataset
+of 99.89%, which was more accurate that what I got from the Decision Trees or
+GBM. The expected out-of-sample error is 100-99.89 = 0.11%.</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<pre style='word-break:break-all'><span class=gewyw5ybjeb><span
+style='color:blue;background:#E1E2E5'>&gt; </span></span><span
+class=gewyw5ybmdb><span style='color:blue;background:#E1E2E5'>predictionB2 &lt;- predict(modFitB1, testing, type = &quot;class&quot;)</span></span></pre><pre
+style='word-break:break-all'><span class=gewyw5ybjeb><span style='color:blue;
+background:#E1E2E5'>&nbsp;</span></span></pre><pre style='word-break:break-all'><span
+class=gewyw5ybjeb><span style='color:blue;background:#E1E2E5'>&gt; </span></span><span
+class=gewyw5ybmdb><span style='color:blue;background:#E1E2E5'>predictionB2</span></span></pre><pre
+style='word-break:break-all'><span style='color:black;background:#E1E2E5'>22  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 </span></pre><pre
+style='word-break:break-all'><span style='color:black;background:#E1E2E5'> B  A  B  A  A  E  D  B  A  A  B  C  B  A  E  E  A  B  B  B </span></pre><pre
+style='word-break:break-all'><span style='color:black;background:#E1E2E5'>Levels: A B C D E</span></pre>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing><b><span style='font-size:12.0pt'>Writing the results to
+a text file for submission:</span></b></p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>pml_write_files = function(x){</p>
+
+<p class=MsoNoSpacing>        n = length(x)</p>
+
+<p class=MsoNoSpacing>        for(i in 1:n){</p>
+
+<p class=MsoNoSpacing>                filename =
+paste0(&quot;problem_id_&quot;,i,&quot;.txt&quot;)</p>
+
+<p class=MsoNoSpacing>               
+write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)</p>
+
+<p class=MsoNoSpacing>        }</p>
+
+<p class=MsoNoSpacing>}</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>pml_write_files(predictionB2)</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing>                             ***********END*************</p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+<p class=MsoNoSpacing><b>&nbsp;</b></p>
+
+<p class=MsoNoSpacing>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
